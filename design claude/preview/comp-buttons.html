@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-sans);font-weight:600;font-size:16px;border:1px solid transparent;cursor:pointer;border-radius:14px;padding:0 18px;height:48px;}
+  .btn-primary{background:var(--primary);color:var(--primary-foreground)}
+  .btn-outline{background:var(--card);color:var(--foreground);border-color:var(--border)}
+  .btn-ghost{background:transparent;color:var(--primary)}
+  .btn-success{background:var(--success);color:#fff}
+  .fab{width:56px;height:56px;border-radius:9999px;background:var(--accent);color:var(--accent-foreground);box-shadow:0 8px 18px -4px color-mix(in oklch,var(--accent) 60%,transparent)}
+  .btn i{width:18px;height:18px}
+</style>
+</head><body>
+<div class="row">
+  <button class="btn btn-primary">Entrar</button>
+  <button class="btn btn-outline">Criar conta</button>
+  <button class="btn btn-ghost"><i data-lucide="plus"></i>Adicionar</button>
+  <button class="btn btn-success"><i data-lucide="check"></i>Confirmar</button>
+  <button class="btn fab"><i data-lucide="plus"></i></button>
+</div>
+<p style="margin:16px 0 0;font-size:12px;color:var(--muted-foreground)">48px tall touch targets, radius-md. Primary = solid blue; outline &amp; ghost for secondary. Gold circular FAB for the screen's main action.</p>
+<script src="https://unpkg.com/lucide@latest"></script><script>lucide.createIcons();</script>
+</body></html>

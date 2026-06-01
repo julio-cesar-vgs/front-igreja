@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .tabs{display:grid;grid-template-columns:repeat(4,1fr);background:var(--muted);border-radius:14px;padding:4px;gap:4px}
+  .tab{text-align:center;font-size:14px;font-weight:500;padding:9px 0;border-radius:10px;color:var(--muted-foreground)}
+  .tab.on{background:var(--card);color:var(--foreground);font-weight:600;box-shadow:0 1px 2px rgba(15,23,42,.08)}
+  .pills{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+  .pill{font-size:14px;font-weight:500;padding:8px 16px;border-radius:9999px;border:1px solid var(--border);background:var(--card);color:var(--foreground)}
+  .pill.on{background:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+</style>
+</head><body>
+<div class="tabs">
+  <div class="tab on">Resumo</div><div class="tab">Louvores</div><div class="tab">Pessoas</div><div class="tab">Financeiro</div>
+</div>
+<div class="pills">
+  <span class="pill on">Todos</span><span class="pill">Em Andamento</span><span class="pill">Agendados</span><span class="pill">Finalizados</span>
+</div>
+<p style="margin:14px 0 0;font-size:12px;color:var(--muted-foreground)">Segmented tabs on a muted track; horizontally-scrollable filter pills below. Selected = solid primary.</p>
+</body></html>

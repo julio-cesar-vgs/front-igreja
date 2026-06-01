@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .nav{display:flex;justify-content:space-around;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:8px 4px}
+  .item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 12px;border-radius:12px;min-width:62px;color:var(--muted-foreground);font-size:12px;font-weight:500}
+  .item.on{color:var(--primary);background:color-mix(in oklch,var(--primary) 10%,transparent);font-weight:600}
+  .item i{width:22px;height:22px}
+</style>
+</head><body>
+<div class="nav">
+  <div class="item on"><i data-lucide="home"></i>Início</div>
+  <div class="item"><i data-lucide="church"></i>Cultos</div>
+  <div class="item"><i data-lucide="users"></i>Membros</div>
+  <div class="item"><i data-lucide="wallet"></i>Financeiro</div>
+  <div class="item"><i data-lucide="menu"></i>Menu</div>
+</div>
+<p style="margin:14px 0 0;font-size:12px;color:var(--muted-foreground)">Fixed 5-tab bottom navigation. Active tab tints icon+label primary with a soft pill background.</p>
+<script src="https://unpkg.com/lucide@latest"></script><script>lucide.createIcons();</script>
+</body></html>

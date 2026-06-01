@@ -1,0 +1,21 @@
+/* Shared chrome for Design System preview cards.
+   Cards render OUTSIDE any title frame — keep them edge-to-edge and minimal. */
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  padding: 22px 24px;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+.row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.col { display: flex; flex-direction: column; gap: 4px; }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.swatch {
+  width: 100%; height: 52px; border-radius: 12px;
+  border: 1px solid color-mix(in oklch, var(--foreground) 8%, transparent);
+}
+.swatch-grid { display: grid; gap: 12px; }
+.tok-name { font-size: 12px; font-weight: 600; }
+.tok-val { font-size: 10.5px; color: var(--muted-foreground); font-family: var(--font-mono); }
+.cap { font-size: 11px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }

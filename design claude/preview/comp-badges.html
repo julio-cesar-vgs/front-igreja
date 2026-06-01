@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:5px 12px;border-radius:9999px}
+  .b-andamento{background:var(--accent);color:var(--accent-foreground)}
+  .b-finalizado{background:color-mix(in oklch,var(--chart-2) 20%,transparent);color:var(--chart-2)}
+  .b-agendado{background:var(--muted);color:var(--muted-foreground)}
+  .b-ativo{background:color-mix(in oklch,var(--success) 20%,transparent);color:var(--success)}
+  .b-dizimista{background:color-mix(in oklch,var(--accent) 80%,transparent);color:var(--accent-foreground)}
+  .b-crescimento{background:color-mix(in oklch,var(--chart-2) 20%,transparent);color:var(--chart-2)}
+  i{width:13px;height:13px}
+</style>
+</head><body>
+<div class="row">
+  <span class="badge b-andamento">Em Andamento</span>
+  <span class="badge b-agendado">Agendado</span>
+  <span class="badge b-finalizado">Finalizado</span>
+  <span class="badge b-ativo">Ativo</span>
+  <span class="badge b-dizimista"><i data-lucide="heart"></i>Dizimista</span>
+  <span class="badge b-crescimento">+12%</span>
+</div>
+<p style="margin:16px 0 0;font-size:12px;color:var(--muted-foreground)">Pill badges (radius-full). Tints derive from semantic tokens at 20% over their hue; solid gold marks live "Em Andamento" status.</p>
+<script src="https://unpkg.com/lucide@latest"></script><script>lucide.createIcons();</script>
+</body></html>

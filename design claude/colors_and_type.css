@@ -1,0 +1,177 @@
+/* =============================================================================
+   IGREJA IPIRANGA — SISTEMA DE GESTÃO
+   Color + Type foundations, extracted from app/globals.css (Tailwind v4 + shadcn)
+   Source: github.com/julio-cesar-vgs/front-igreja → app/globals.css
+   Theme name in source: "Igreja Ipiranga - Tema Azul Confiança"
+
+   All colors are authored in OKLCH exactly as in the product. Hex equivalents
+   are listed in comments for convenience (from GUIA_PROTOTIPOS_ANDROID.md).
+   ============================================================================= */
+
+/* ----------------------------------------------------------------------------
+   FONTS
+   Inter (sans) + Geist Mono (mono) — both Google Fonts, loaded via CDN.
+   In production the app loads Inter through next/font/google.
+   ---------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* ===== BRAND / SEMANTIC COLOR TOKENS — LIGHT (default) =================== */
+  --background: oklch(0.98 0.005 250);          /* near-white, faint blue tint */
+  --foreground: oklch(0.15 0.02 250);           /* ink, deep blue-black        */
+  --card: oklch(1 0 0);                          /* pure white                  */
+  --card-foreground: oklch(0.15 0.02 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0.02 250);
+
+  --primary: oklch(0.45 0.15 250);               /* #2563eb — Azul Confiança    */
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.95 0.02 250);             /* pale blue fill              */
+  --secondary-foreground: oklch(0.25 0.05 250);
+  --muted: oklch(0.95 0.01 250);
+  --muted-foreground: oklch(0.45 0.02 250);
+
+  --accent: oklch(0.75 0.12 85);                 /* #eab308 — Dourado / gold    */
+  --accent-foreground: oklch(0.25 0.05 85);
+
+  --destructive: oklch(0.55 0.22 25);            /* #ef4444 — red               */
+  --destructive-foreground: oklch(0.98 0 0);
+  --success: oklch(0.55 0.15 145);               /* #22c55e — green / dízimos   */
+  --success-foreground: oklch(0.98 0 0);
+  --warning: oklch(0.75 0.15 85);                /* #f59e0b — orange / alerta   */
+  --warning-foreground: oklch(0.25 0.05 85);
+
+  --border: oklch(0.90 0.01 250);
+  --input: oklch(0.95 0.01 250);
+  --ring: oklch(0.45 0.15 250);                  /* focus ring = primary        */
+
+  /* ===== CHART / DATA-VIZ ================================================== */
+  --chart-1: oklch(0.45 0.15 250);               /* blue   */
+  --chart-2: oklch(0.55 0.15 145);               /* green  */
+  --chart-3: oklch(0.75 0.12 85);                /* gold   */
+  --chart-4: oklch(0.55 0.22 25);                /* red    */
+  --chart-5: oklch(0.60 0.12 300);               /* violet */
+
+  /* ===== SIDEBAR (dark navy chrome, used on desktop) ====================== */
+  --sidebar: oklch(0.20 0.05 250);
+  --sidebar-foreground: oklch(0.95 0.01 250);
+  --sidebar-primary: oklch(0.55 0.15 250);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.30 0.05 250);
+  --sidebar-accent-foreground: oklch(0.95 0.01 250);
+  --sidebar-border: oklch(0.30 0.03 250);
+  --sidebar-ring: oklch(0.55 0.15 250);
+
+  /* ===== RADIUS SCALE ===================================================== */
+  --radius: 1rem;                                /* base — generous, friendly  */
+  --radius-sm: calc(var(--radius) - 4px);        /* 12px */
+  --radius-md: calc(var(--radius) - 2px);        /* 14px */
+  --radius-lg: var(--radius);                    /* 16px */
+  --radius-xl: calc(var(--radius) + 4px);        /* 20px */
+  /* Common in-app radii beyond the scale: rounded-2xl (1rem) on finance cards,
+     rounded-full on pills/avatars/FAB, rounded-[3rem] on the phone bezel.     */
+
+  /* ===== TYPE TOKENS ====================================================== */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Type scale — tuned LARGE for a 30+ audience (see GUIA_PROTOTIPOS).
+     Body never below 16px; inputs/buttons run 18px (text-lg) on touch screens. */
+  --text-xs: 0.75rem;    /* 12px — meta, payment method, badges      */
+  --text-sm: 0.875rem;   /* 14px — secondary text, helper            */
+  --text-base: 1rem;     /* 16px — body, labels                      */
+  --text-lg: 1.125rem;   /* 18px — input text, primary buttons       */
+  --text-xl: 1.25rem;    /* 20px — screen titles in headers          */
+  --text-2xl: 1.5rem;    /* 24px — page titles, big screen headings  */
+  --text-3xl: 1.875rem;  /* 30px — hero numbers (R$ totals)          */
+  --text-4xl: 2.25rem;   /* 36px — avatar initial, splash            */
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.3;
+  --leading-normal: 1.5;
+  --tracking-wide: 0.025em;   /* used on uppercase section eyebrows */
+}
+
+/* ----------------------------------------------------------------------------
+   DARK THEME — applied via .dark on a parent (next-themes class strategy).
+   Same hues, lifted lightness; primary brightens so it stays legible on navy.
+   ---------------------------------------------------------------------------- */
+.dark {
+  --background: oklch(0.12 0.02 250);
+  --foreground: oklch(0.95 0.01 250);
+  --card: oklch(0.18 0.02 250);
+  --card-foreground: oklch(0.95 0.01 250);
+  --popover: oklch(0.18 0.02 250);
+  --popover-foreground: oklch(0.95 0.01 250);
+
+  --primary: oklch(0.60 0.15 250);
+  --primary-foreground: oklch(0.12 0.02 250);
+  --secondary: oklch(0.25 0.03 250);
+  --secondary-foreground: oklch(0.95 0.01 250);
+  --muted: oklch(0.25 0.02 250);
+  --muted-foreground: oklch(0.65 0.02 250);
+
+  --accent: oklch(0.70 0.12 85);
+  --accent-foreground: oklch(0.15 0.05 85);
+  --destructive: oklch(0.50 0.20 25);
+  --destructive-foreground: oklch(0.95 0 0);
+  --success: oklch(0.50 0.15 145);
+  --success-foreground: oklch(0.95 0 0);
+  --warning: oklch(0.70 0.15 85);
+  --warning-foreground: oklch(0.15 0.05 85);
+
+  --border: oklch(0.30 0.02 250);
+  --input: oklch(0.25 0.02 250);
+  --ring: oklch(0.60 0.15 250);
+
+  --chart-1: oklch(0.60 0.15 250);
+  --chart-2: oklch(0.55 0.15 145);
+  --chart-3: oklch(0.70 0.12 85);
+  --chart-4: oklch(0.50 0.20 25);
+  --chart-5: oklch(0.55 0.12 300);
+
+  --sidebar: oklch(0.12 0.02 250);
+  --sidebar-foreground: oklch(0.95 0.01 250);
+  --sidebar-primary: oklch(0.60 0.15 250);
+  --sidebar-primary-foreground: oklch(0.12 0.02 250);
+  --sidebar-accent: oklch(0.25 0.03 250);
+  --sidebar-accent-foreground: oklch(0.95 0.01 250);
+  --sidebar-border: oklch(0.25 0.02 250);
+  --sidebar-ring: oklch(0.60 0.15 250);
+}
+
+/* ----------------------------------------------------------------------------
+   SEMANTIC ELEMENT STYLES — convenience classes mapping tokens to roles.
+   Use these when authoring static HTML mocks outside the React app.
+   ---------------------------------------------------------------------------- */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 { font-size: var(--text-2xl); font-weight: var(--weight-bold); line-height: var(--leading-tight); }
+h2 { font-size: var(--text-xl); font-weight: var(--weight-semibold); line-height: var(--leading-snug); }
+h3 { font-size: var(--text-lg); font-weight: var(--weight-semibold); line-height: var(--leading-snug); }
+p  { font-size: var(--text-base); }
+small { font-size: var(--text-sm); color: var(--muted-foreground); }
+
+/* Uppercase eyebrow / section label pattern used across detail screens */
+.eyebrow {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--muted-foreground);
+}
+
+code, kbd, pre, .mono { font-family: var(--font-mono); }

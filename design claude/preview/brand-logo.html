@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .lockup{display:flex;align-items:center;gap:16px}
+  .badge{width:64px;height:64px;border-radius:9999px;background:color-mix(in oklch,var(--primary) 12%,transparent);display:flex;align-items:center;justify-content:center}
+  .badge i{width:32px;height:32px;color:var(--primary)}
+  .name{font-size:22px;font-weight:700;line-height:1.1}
+  .tag{font-size:14px;color:var(--muted-foreground)}
+</style>
+</head><body>
+<div class="lockup">
+  <div class="badge"><i data-lucide="church"></i></div>
+  <div><div class="name">Igreja Ipiranga</div><div class="tag">Sistema de Gestão</div></div>
+</div>
+<p style="margin:16px 0 0;font-size:12px;color:var(--muted-foreground)">No bespoke logo ships in the repo — the de-facto brand mark is the Lucide <code style="font-family:var(--font-mono)">church</code> glyph in a tinted circular badge, paired with the Inter wordmark.</p>
+<script src="https://unpkg.com/lucide@latest"></script><script>lucide.createIcons();</script>
+</body></html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Igreja Ipiranga — UI Kit</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  html, body { margin: 0; height: 100%; }
+  body { background: linear-gradient(135deg, color-mix(in oklch, var(--primary) 10%, var(--background)), color-mix(in oklch, var(--accent) 10%, var(--background))); display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 32px 16px; font-family: var(--font-sans); }
+  .stage { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .kit-caption { text-align: center; color: var(--foreground); }
+  .kit-caption h1 { font-size: 18px; font-weight: 700; margin: 0; }
+  .kit-caption p { font-size: 13px; color: var(--muted-foreground); margin: 4px 0 0; }
+  #root { filter: drop-shadow(0 30px 60px rgba(15,23,42,.25)); }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div id="root"></div>
+    <div class="kit-caption">
+      <h1>Igreja Ipiranga · Sistema de Gestão</h1>
+      <p>Protótipo interativo — toque para navegar. Login → Dashboard → Cultos / Membros / Financeiro.</p>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script type="text/babel" src="kit-ui.jsx"></script>
+  <script type="text/babel" src="kit-screens-a.jsx"></script>
+  <script type="text/babel" src="kit-screens-b.jsx"></script>
+  <script type="text/babel">
+    const { useState } = React;
+
+    function App() {
+      const [screen, setScreen] = useState("login");
+      const [tab, setTab] = useState("home");
+      const [toast, setToast] = useState(null);
+
+      const showToast = (msg) => {
+        setToast(msg);
+        clearTimeout(window.__t);
+        window.__t = setTimeout(() => setToast(null), 1800);
+      };
+
+      const nav = (s) => { window.requestAnimationFrame(() => {}); setScreen(s); };
+
+      // bottom-nav tab change
+      const onTab = (t) => {
+        setTab(t);
+        if (t === "home") setScreen("dashboard");
+        else if (t === "cultos") setScreen("cultos");
+        else if (t === "membros") setScreen("membros");
+        else if (t === "financeiro") setScreen("financeiro");
+        else showToast("Menu — em breve");
+      };
+
+      const SCREENS = {
+        login: <LoginScreen onLogin={() => { setScreen("dashboard"); setTab("home"); }} />,
+        dashboard: <DashboardScreen onNavigate={(s) => { if (["cultos","membros","financeiro"].includes(s)) { setTab(s); } nav(s); }} onToast={showToast} />,
+        cultos: <CultosScreen onNavigate={nav} onToast={showToast} />,
+        "culto-detalhe": <CultoDetalheScreen onBack={() => nav("cultos")} onNavigate={nav} />,
+        membros: <MembrosScreen onNavigate={nav} onToast={showToast} />,
+        "membro-detalhe": <MembroDetalheScreen onBack={() => nav("membros")} />,
+        financeiro: <FinanceiroScreen onNavigate={nav} onToast={showToast} />,
+        conferencia: <ConferenciaScreen onBack={() => nav("financeiro")} onToast={showToast} />,
+      };
+
+      const showNav = ["dashboard", "cultos", "membros", "financeiro"].includes(screen);
+
+      return (
+        <PhoneFrame>
+          {SCREENS[screen]}
+          {showNav && <BottomNavigation active={tab} onChange={onTab} />}
+          <Toast message={toast} />
+        </PhoneFrame>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
