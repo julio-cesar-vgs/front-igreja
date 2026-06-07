@@ -89,7 +89,7 @@ const NAV_TABS = [
   { id: "cultos", label: "Cultos", icon: "church" },
   { id: "membros", label: "Membros", icon: "users" },
   { id: "financeiro", label: "Financeiro", icon: "wallet" },
-  { id: "menu", label: "Menu", icon: "menu" },
+  { id: "relatorios", label: "Relatórios", icon: "bar-chart-2" },
 ];
 function BottomNavigation({ active, onChange }) {
   return (
@@ -107,10 +107,68 @@ function BottomNavigation({ active, onChange }) {
   );
 }
 
-// ---- Toast (lightweight) --------------------------------------------------
-function Toast({ message }) {
-  if (!message) return null;
-  return <div className="toast">{message}</div>;
+// ---- Toast (typed, with icon) ---------------------------------------------
+function Toast({ toast }) {
+  if (!toast) return null;
+  const map = {
+    success: { icon: "check-circle-2", color: "var(--success)" },
+    warning: { icon: "alert-circle", color: "var(--warning)" },
+    error: { icon: "x-circle", color: "var(--destructive)" },
+  };
+  const m = map[toast.type] || map.success;
+  return (
+    <div className={"toast toast-" + (toast.type || "success")}>
+      <Icon name={m.icon} size={18} style={{ color: m.color }} />
+      <span>{toast.message}</span>
+    </div>
+  );
 }
 
-Object.assign(window, { Icon, Button, Input, Badge, Card, brl, PhoneFrame, BottomNavigation, Toast, NAV_TABS });
+// ---- Sheet: fullscreen or bottom-sheet overlay ----------------------------
+function Sheet({ variant = "full", onClose, children }) {
+  return (
+    <div className="sheet-backdrop" onClick={onClose}>
+      <div className={"sheet sheet-" + variant} onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ---- Skeleton loading block ----------------------------------------------
+function Skeleton({ h = 16, w = "100%", r = 8, style = {} }) {
+  return <div className="skeleton" style={{ height: h, width: w, borderRadius: r, ...style }} />;
+}
+
+// ---- Conferred-culto banner — only locks FINANCIAL section ---------------
+function LockedBanner({ data, conferenteNome, canReabrir, onReabrir }) {
+  return (
+    <div className="locked-banner">
+      <Icon name="lock" size={20} style={{ color: "var(--warning)" }} />
+      <div style={{ flex: 1 }}>
+        <p className="b600" style={{ color: "var(--warning)", margin: 0 }}>Caixa conferido em {data}</p>
+        <p className="metric-sub" style={{ margin: 0 }}>Edições financeiras bloqueadas{conferenteNome ? ` · conf. ${conferenteNome}` : ""}. Louvores e pessoas seguem editáveis.</p>
+      </div>
+      {canReabrir && <button className="reabrir-link" onClick={onReabrir}>Reabrir</button>}
+    </div>
+  );
+}
+
+// ---- RoleBar: "ver como" selector (outside the phone) ----------------------
+function RoleBar({ role, onChange }) {
+  const roles = ["MEMBRO", "COOPERADOR", "TESOUREIRO", "ADMIN"];
+  return (
+    <div className="rolebar">
+      <span className="rolebar-lbl"><Icon name="eye" size={14} /> Ver como</span>
+      <div className="rolebar-opts">
+        {roles.map((r) => (
+          <button key={r} className={"rolebar-opt" + (role === r ? " on" : "")} onClick={() => onChange(r)}>
+            {ROLE_LABEL[r]}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { Icon, Button, Input, Badge, Card, brl, PhoneFrame, BottomNavigation, Toast, Sheet, Skeleton, LockedBanner, RoleBar, NAV_TABS });

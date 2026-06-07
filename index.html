@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Igreja Ipiranga · Design System</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 56px 28px 80px; }
+
+  /* ---- header ---- */
+  .lockup { display: flex; align-items: center; gap: 16px; }
+  .lockup .badge { width: 60px; height: 60px; border-radius: 9999px; background: color-mix(in oklch, var(--primary) 12%, transparent); display: flex; align-items: center; justify-content: center; color: var(--primary); }
+  .lockup .badge .ii { width: 30px; height: 30px; }
+  .lockup h1 { font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -.01em; }
+  .lockup p { font-size: 15px; color: var(--muted-foreground); margin: 3px 0 0; }
+  .intro { margin: 28px 0 44px; max-width: 720px; font-size: 16px; line-height: 1.6; color: var(--muted-foreground); }
+  .intro strong { color: var(--foreground); font-weight: 600; }
+
+  .eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--primary); margin: 0 0 16px; }
+
+  /* ---- primary entry: prototype ---- */
+  .hero-link { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; text-decoration: none; color: inherit;
+    background: linear-gradient(135deg, var(--primary), color-mix(in oklch, var(--primary) 72%, black)); color: var(--primary-foreground);
+    border-radius: 24px; padding: 32px; box-shadow: 0 20px 40px -16px color-mix(in oklch, var(--primary) 60%, transparent); transition: transform .15s, box-shadow .15s; }
+  .hero-link:hover { transform: translateY(-3px); box-shadow: 0 28px 50px -16px color-mix(in oklch, var(--primary) 60%, transparent); }
+  .hero-link h2 { font-size: 22px; font-weight: 700; margin: 0 0 8px; }
+  .hero-link .desc { font-size: 15px; line-height: 1.5; opacity: .85; max-width: 460px; }
+  .hero-link .go { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; font-weight: 600; font-size: 15px; }
+  .hero-link .go .ii { width: 18px; height: 18px; }
+  .hero-art { width: 132px; height: 132px; border-radius: 28px; background: rgba(255,255,255,.12); display: flex; align-items: center; justify-content: center; }
+  .hero-art .ii { width: 64px; height: 64px; color: #fff; }
+
+  /* ---- secondary links row ---- */
+  .links { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .tile { display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 18px 20px; transition: background .15s, border-color .15s; }
+  .tile:hover { background: var(--secondary); border-color: color-mix(in oklch, var(--primary) 30%, var(--border)); }
+  .tile .ic { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: color-mix(in oklch, var(--accent) 22%, transparent); color: var(--accent-foreground); }
+  .tile .ic .ii { width: 22px; height: 22px; }
+  .tile h3 { font-size: 16px; font-weight: 600; margin: 0; }
+  .tile p { font-size: 13px; color: var(--muted-foreground); margin: 2px 0 0; }
+
+  /* ---- foundations gallery ---- */
+  section.gallery { margin-top: 56px; }
+  .group { margin-top: 36px; }
+  .group > h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted-foreground); margin: 0 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; }
+  .specimen { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(15,23,42,.05); }
+  .specimen .label { font-size: 12.5px; font-weight: 600; padding: 11px 14px 0; }
+  .specimen iframe { width: 100%; border: 0; display: block; background: var(--background); }
+
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted-foreground); line-height: 1.6; }
+  footer code { font-family: var(--font-mono); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="lockup">
+    <div class="badge"><i data-lucide="church"></i></div>
+    <div>
+      <h1>Igreja Ipiranga</h1>
+      <p>Design System · Sistema de Gestão</p>
+    </div>
+  </div>
+
+  <p class="intro">Ponto de partida para navegar entre tudo que foi gerado: o <strong>protótipo interativo do app</strong> e os <strong>fundamentos visuais</strong> (cores, tipografia, espaçamento, componentes e marca).</p>
+
+  <p class="eyebrow">Protótipo</p>
+  <a class="hero-link" href="ui_kits/mobile-app/index.html">
+    <div>
+      <h2>Aplicativo Móvel — Protótipo Interativo</h2>
+      <div class="desc">Recriação fiel e clicável do app. Comece no login e navegue: Dashboard → Cultos → Membros → Financeiro → Conferência.</div>
+      <span class="go">Abrir protótipo <i data-lucide="arrow-right"></i></span>
+    </div>
+    <div class="hero-art"><i data-lucide="smartphone"></i></div>
+  </a>
+
+  <div class="links">
+    <a class="tile" href="README.md">
+      <div class="ic"><i data-lucide="book-open"></i></div>
+      <div><h3>README & Guia da Marca</h3><p>Contexto, tom de voz, fundamentos visuais e iconografia</p></div>
+    </a>
+    <a class="tile" href="colors_and_type.css">
+      <div class="ic"><i data-lucide="palette"></i></div>
+      <div><h3>Tokens — Cores & Tipografia</h3><p>Variáveis OKLCH (claro + escuro), fontes, raios</p></div>
+    </a>
+    <a class="tile" href="ui_kits/mobile-app/role-comparison.html" style="grid-column:span 2">
+      <div class="ic" style="background:color-mix(in oklch,var(--success) 20%,transparent)"><i data-lucide="shield"></i></div>
+      <div><h3>Comparativo de Perfis</h3><p>Membro · Cooperador · Tesoureiro · Admin — 4 telas lado a lado, clique para ampliar</p></div>
+    </a>
+  </div>
+
+  <section class="gallery">
+    <p class="eyebrow" style="margin-bottom:4px">Fundamentos</p>
+
+    <div class="group" data-group="Cores" data-h="200">
+      <h4>Cores</h4>
+      <div class="grid"></div>
+    </div>
+    <div class="group" data-group="Tipografia" data-h="200">
+      <h4>Tipografia</h4>
+      <div class="grid"></div>
+    </div>
+    <div class="group" data-group="Espaçamento" data-h="190">
+      <h4>Espaçamento & Elevação</h4>
+      <div class="grid"></div>
+    </div>
+    <div class="group" data-group="Componentes" data-h="215">
+      <h4>Componentes</h4>
+      <div class="grid"></div>
+    </div>
+    <div class="group" data-group="Marca" data-h="205">
+      <h4>Marca & Iconografia</h4>
+      <div class="grid"></div>
+    </div>
+  </section>
+
+  <footer>
+    Gerado a partir de <code>github.com/julio-cesar-vgs/front-igreja</code>. Os ícones (Lucide) carregam via CDN — conecte-se à internet para vê-los.
+  </footer>
+</div>
+
+<script>
+  // Foundation specimen cards, grouped. [file, label, group]
+  const SPECIMENS = [
+    ["preview/colors-primary.html", "Primária & Destaque", "Cores"],
+    ["preview/colors-semantic.html", "Cores Semânticas", "Cores"],
+    ["preview/colors-neutrals.html", "Neutros & Superfícies", "Cores"],
+    ["preview/colors-sidebar.html", "Sidebar (navy)", "Cores"],
+    ["preview/colors-charts.html", "Paleta de Gráficos", "Cores"],
+    ["preview/colors-dark.html", "Tema Escuro", "Cores"],
+    ["preview/type-display.html", "Display", "Tipografia"],
+    ["preview/type-body.html", "Corpo & Rótulos", "Tipografia"],
+    ["preview/type-mono.html", "Monoespaçada", "Tipografia"],
+    ["preview/type-scale.html", "Escala Tipográfica", "Tipografia"],
+    ["preview/radius.html", "Raios de Canto", "Espaçamento"],
+    ["preview/shadows.html", "Elevação / Sombras", "Espaçamento"],
+    ["preview/spacing-scale.html", "Escala de Espaçamento", "Espaçamento"],
+    ["preview/comp-buttons.html", "Botões", "Componentes"],
+    ["preview/comp-inputs.html", "Campos de Entrada", "Componentes"],
+    ["preview/comp-badges.html", "Badges", "Componentes"],
+    ["preview/comp-cards.html", "Cards de Métrica", "Componentes"],
+    ["preview/comp-tabs.html", "Abas & Filtros", "Componentes"],
+    ["preview/comp-bottomnav.html", "Navegação Inferior", "Componentes"],
+    ["preview/comp-alerts.html", "Alertas de Status", "Componentes"],
+    ["preview/brand-logo.html", "Lockup da Marca", "Marca"],
+    ["preview/brand-icons.html", "Iconografia", "Marca"],
+  ];
+  const heights = { "Espaçamento": 190 };
+  document.querySelectorAll(".group").forEach((g) => {
+    const grid = g.querySelector(".grid");
+    const h = +g.dataset.h;
+    SPECIMENS.filter((s) => s[2] === g.dataset.group).forEach(([file, label]) => {
+      const card = document.createElement("div");
+      card.className = "specimen";
+      card.innerHTML = `<div class="label">${label}</div><iframe src="${file}" style="height:${h}px"></iframe>`;
+      card.querySelector(".label").addEventListener("click", () => window.open(file, "_blank"));
+      grid.appendChild(card);
+    });
+  });
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

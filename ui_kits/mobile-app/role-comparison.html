@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Igreja Ipiranga — Comparativo por Perfil</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--background); font-family: var(--font-sans); color: var(--foreground); }
+
+  /* ---- Page header ---- */
+  .page-hdr { background: var(--primary); color: var(--primary-foreground); padding: 20px 32px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100; }
+  .page-hdr .ii { width: 28px; height: 28px; }
+  .page-hdr h1 { font-size: 18px; font-weight: 700; margin: 0; }
+  .page-hdr p { font-size: 13px; opacity: .8; margin: 2px 0 0; }
+  .back-link { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--primary-foreground); opacity: .8; font-size: 13px; font-weight: 500; text-decoration: none; }
+  .back-link:hover { opacity: 1; }
+
+  /* ---- Role legend pills ---- */
+  .legend { display: flex; gap: 10px; padding: 20px 32px 0; flex-wrap: wrap; }
+  .legend-pill { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 8px 14px; }
+  .role-dot { width: 10px; height: 10px; border-radius: 9999px; }
+  .legend-pill .name { font-weight: 600; font-size: 14px; }
+  .legend-pill .desc { font-size: 12px; color: var(--muted-foreground); margin-left: 4px; }
+
+  /* ---- Section ---- */
+  .section { padding: 28px 32px 0; }
+  .section-label { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border); }
+  .section-label h2 { font-size: 17px; font-weight: 700; margin: 0; }
+  .section-label .ii { width: 20px; height: 20px; color: var(--primary); }
+  .section-label p { font-size: 13px; color: var(--muted-foreground); margin: 0 0 0 4px; }
+
+  /* ---- Phone grid (4 per row) ---- */
+  .phone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+  /* ---- Phone card ---- */
+  .phone-card { display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; }
+  .phone-card:hover .phone-wrap { transform: translateY(-4px); box-shadow: 0 24px 48px rgba(15,23,42,.28); }
+  .phone-wrap { transition: transform .2s, box-shadow .2s; border-radius: 28px; overflow: hidden; box-shadow: 0 12px 28px rgba(15,23,42,.18); }
+  .phone-wrap iframe { display: block; border: 0; }
+  .role-badge { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; }
+  .role-badge .dot { width: 9px; height: 9px; border-radius: 9999px; }
+  .perms { display: flex; flex-direction: column; gap: 3px; width: 100%; }
+  .perm { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted-foreground); }
+  .perm .ii { width: 12px; height: 12px; }
+  .perm.yes { color: var(--success); }
+  .perm.no  { color: var(--destructive); opacity: .7; }
+
+  /* ---- Fullscreen overlay ---- */
+  #overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.85); z-index: 200; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+  #overlay.on { display: flex; }
+  #overlay iframe { border: 0; border-radius: 32px; box-shadow: 0 40px 80px rgba(0,0,0,.5); }
+  #overlay .close-btn { position: fixed; top: 20px; right: 20px; background: var(--card); border: 0; border-radius: 9999px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.3); }
+  #overlay .close-btn .ii { width: 22px; height: 22px; }
+  #overlay-label { color: #fff; font-size: 15px; font-weight: 600; letter-spacing: .03em; }
+
+  /* ---- Differences callout ---- */
+  .diff-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-top: 0; }
+  .diff-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+  .diff-card h3 { font-size: 14px; font-weight: 700; margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
+  .diff-item { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; margin-bottom: 6px; }
+  .diff-item .ii { width: 13px; height: 13px; flex-shrink: 0; margin-top: 1px; }
+  .diff-item.yes { color: var(--success); }
+  .diff-item.no  { color: var(--destructive); }
+  .diff-item.warn { color: var(--warning); }
+  .diff-item.info { color: var(--primary); }
+
+  footer { padding: 40px 32px 48px; font-size: 13px; color: var(--muted-foreground); border-top: 1px solid var(--border); margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<!-- Page header -->
+<div class="page-hdr">
+  <i data-lucide="church"></i>
+  <div>
+    <h1>Comparativo de Perfis — Igreja Ipiranga</h1>
+    <p>O que cada perfil vê e pode fazer no sistema</p>
+  </div>
+  <a href="index.html" class="back-link"><i data-lucide="arrow-left"></i> Protótipo completo</a>
+</div>
+
+<!-- Role legend -->
+<div class="legend" id="legend"></div>
+
+<!-- Section 1: Dashboard -->
+<div class="section">
+  <div class="section-label">
+    <i data-lucide="home"></i>
+    <h2>Dashboard (Início)</h2>
+    <p>— Ações Rápidas condicionais por perfil</p>
+  </div>
+  <div class="phone-grid" id="grid-dashboard"></div>
+</div>
+
+<!-- Section 2: Culto — Resumo -->
+<div class="section" style="margin-top:32px">
+  <div class="section-label">
+    <i data-lucide="church"></i>
+    <h2>Detalhe do Culto — Resumo</h2>
+    <p>— Botões de Conferir e Fechar Culto visíveis por perfil</p>
+  </div>
+  <div class="phone-grid" id="grid-culto"></div>
+</div>
+
+<!-- Section 3: Culto — Financeiro -->
+<div class="section" style="margin-top:32px">
+  <div class="section-label">
+    <i data-lucide="wallet"></i>
+    <h2>Detalhe do Culto — Financeiro</h2>
+    <p>— Registrar dízimo/oferta e Conferir Caixa</p>
+  </div>
+  <div class="phone-grid" id="grid-financeiro"></div>
+</div>
+
+<!-- Section 4: Membros -->
+<div class="section" style="margin-top:32px">
+  <div class="section-label">
+    <i data-lucide="users"></i>
+    <h2>Lista de Membros</h2>
+    <p>— FAB para cadastrar, chipss de filtro</p>
+  </div>
+  <div class="phone-grid" id="grid-membros"></div>
+</div>
+
+<!-- Permissions summary -->
+<div class="section" style="margin-top:32px">
+  <div class="section-label">
+    <i data-lucide="shield"></i>
+    <h2>Resumo de Permissões</h2>
+    <p>— Tabela rápida por perfil</p>
+  </div>
+  <div class="diff-grid" id="diff-grid"></div>
+</div>
+
+<footer>
+  Protótipo gerado a partir de <code>github.com/julio-cesar-vgs/front-igreja</code>. Permissões baseadas em <code>PROTOTYPE_FIELD_CONTRACTS.md §18</code>.
+</footer>
+
+<!-- Fullscreen overlay -->
+<div id="overlay">
+  <div id="overlay-label"></div>
+  <iframe id="overlay-iframe" width="375" height="812"></iframe>
+  <button class="close-btn" onclick="closeOverlay()"><i data-lucide="x"></i></button>
+</div>
+
+<script>
+const ROLES = [
+  { id: "MEMBRO",     label: "Membro",      color: "#94a3b8", desc: "Apenas visualização" },
+  { id: "COOPERADOR", label: "Cooperador",   color: "#2563eb", desc: "Cadastros não-financeiros" },
+  { id: "TESOUREIRO", label: "Tesoureiro",   color: "#22c55e", desc: "Financeiro completo" },
+  { id: "ADMIN",      label: "Admin",        color: "#eab308", desc: "Acesso total" },
+];
+
+const SCREENS = [
+  { id: "dashboard",   navClick: null },
+  { id: "culto",       navClick: "openFirstCulto" },
+  { id: "financeiro-tab", navClick: "openFinanceiro" },
+  { id: "membros",     navClick: "openMembros" },
+];
+
+const PERMS = {
+  MEMBRO:     ["Ver cultos e membros", "Sem ações financeiras", "Sem cadastro de membros", "Sem Ações Rápidas"],
+  COOPERADOR: ["Adicionar músicos, visitantes", "Registrar ofertas", "Cadastrar membros", "Sem acesso a dízimos"],
+  TESOUREIRO: ["Registrar dízimos e ofertas", "Conferir caixa", "Ver relatórios", "Sem criar/excluir culto"],
+  ADMIN:      ["Criar/editar/excluir culto", "Reabrir conferência", "Excluir membros", "Acesso total"],
+};
+
+const PERM_TABLE = [
+  { label: "Ver cultos", MEMBRO: true, COOPERADOR: true, TESOUREIRO: true, ADMIN: true },
+  { label: "Criar culto", MEMBRO: false, COOPERADOR: false, TESOUREIRO: false, ADMIN: true },
+  { label: "Editar culto", MEMBRO: false, COOPERADOR: false, TESOUREIRO: false, ADMIN: true },
+  { label: "Adicionar participantes", MEMBRO: false, COOPERADOR: true, TESOUREIRO: true, ADMIN: true },
+  { label: "Registrar dízimo", MEMBRO: false, COOPERADOR: false, TESOUREIRO: true, ADMIN: true },
+  { label: "Registrar oferta", MEMBRO: false, COOPERADOR: true, TESOUREIRO: true, ADMIN: true },
+  { label: "Conferir caixa", MEMBRO: false, COOPERADOR: false, TESOUREIRO: true, ADMIN: true },
+  { label: "Reabrir conferência", MEMBRO: false, COOPERADOR: false, TESOUREIRO: false, ADMIN: true },
+  { label: "Cadastrar membro", MEMBRO: false, COOPERADOR: true, TESOUREIRO: true, ADMIN: true },
+  { label: "Excluir membro", MEMBRO: false, COOPERADOR: false, TESOUREIRO: false, ADMIN: true },
+  { label: "Alterar status membro", MEMBRO: false, COOPERADOR: false, TESOUREIRO: false, ADMIN: true },
+  { label: "Ver relatórios", MEMBRO: false, COOPERADOR: false, TESOUREIRO: true, ADMIN: true },
+  { label: "Ver auditoria", MEMBRO: false, COOPERADOR: false, TESOUREIRO: false, ADMIN: true },
+];
+
+// phone scale: 375x812 → fit in ~200px wide (scale 0.53)
+const SCALE = 0.53;
+const PW = Math.round(375 * SCALE);
+const PH = Math.round(812 * SCALE);
+
+// Screen → URL mapping
+function iframeSrc(role, section) {
+  const base = "index.html";
+  const screenMap = {
+    dashboard:       `?role=${role}&screen=dashboard&embed=1`,
+    culto:           `?role=${role}&screen=culto&embed=1`,
+    "financeiro-tab":`?role=${role}&screen=culto&tab=financeiro&embed=1`,
+    membros:         `?role=${role}&screen=membros&embed=1`,
+  };
+  return base + (screenMap[section] || `?role=${role}&embed=1`);
+}
+
+function buildLegend() {
+  const el = document.getElementById("legend");
+  ROLES.forEach(r => {
+    el.innerHTML += `<div class="legend-pill">
+      <div class="role-dot" style="background:${r.color}"></div>
+      <span class="name">${r.label}</span>
+      <span class="desc">— ${r.desc}</span>
+    </div>`;
+  });
+}
+
+function buildGrid(gridId, section) {
+  const grid = document.getElementById(gridId);
+  ROLES.forEach(r => {
+    const src = iframeSrc(r.id, section);
+    const label = `${r.label} — ${section}`;
+    const perms = PERMS[r.id];
+    grid.innerHTML += `
+      <div class="phone-card" onclick="openOverlay('${r.id}','${section}','${r.label}')">
+        <div class="phone-wrap" style="width:${PW}px;height:${PH}px">
+          <iframe loading="lazy" src="${src}"
+            style="width:375px;height:812px;transform:scale(${SCALE});transform-origin:top left"
+            title="${label}"></iframe>
+        </div>
+        <div class="role-badge">
+          <div class="dot" style="background:${r.color}"></div>
+          ${r.label}
+        </div>
+      </div>`;
+  });
+}
+
+function buildDiffGrid() {
+  const grid = document.getElementById("diff-grid");
+  ROLES.forEach(r => {
+    const items = PERM_TABLE.map(p => {
+      const val = p[r.id];
+      const cls = val ? "yes" : "no";
+      const icon = val ? "check" : "x";
+      return `<div class="diff-item ${cls}"><i data-lucide="${icon}"></i>${p.label}</div>`;
+    }).join("");
+    grid.innerHTML += `
+      <div class="diff-card">
+        <h3><div class="role-dot" style="width:12px;height:12px;border-radius:50%;background:${ROLES.find(x=>x.id===r.id).color}"></div>${r.label}</h3>
+        ${items}
+      </div>`;
+  });
+}
+
+function openOverlay(role, section, roleLabel) {
+  const ol = document.getElementById("overlay");
+  const iframe = document.getElementById("overlay-iframe");
+  const lbl = document.getElementById("overlay-label");
+  const src = iframeSrc(role, section);
+  iframe.src = src;
+  lbl.textContent = roleLabel + " — " + section;
+  ol.classList.add("on");
+  document.body.style.overflow = "hidden";
+}
+
+function closeOverlay() {
+  document.getElementById("overlay").classList.remove("on");
+  document.getElementById("overlay-iframe").src = "";
+  document.body.style.overflow = "";
+}
+
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeOverlay(); });
+
+buildLegend();
+buildGrid("grid-dashboard", "dashboard");
+buildGrid("grid-culto", "culto");
+buildGrid("grid-financeiro", "financeiro-tab");
+buildGrid("grid-membros", "membros");
+buildDiffGrid();
+lucide.createIcons();
+</script>
+</body>
+</html>

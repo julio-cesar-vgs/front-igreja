@@ -1,44 +1,44 @@
-/* global React, Icon, Button, Input, Badge, Card, brl */
+/* global React, Icon, Button, Input, Badge, Card, brl, can, cultoTotais, MEMBROS */
 // =============================================================================
-// Igreja Ipiranga — Screens B: Membros, Membro Detalhe, Financeiro, Conferência
+// Igreja Ipiranga — Screens B (V2): Membros, Membro Detalhe, Financeiro, Relatórios
 // =============================================================================
-
-const MEMBROS = [
-  { id: 1, nome: "João Silva", status: "ATIVO", dizimista: true, tel: "(11) 98765-4321" },
-  { id: 2, nome: "Maria Santos", status: "ATIVO", dizimista: true, tel: "(11) 98765-4322" },
-  { id: 3, nome: "Pedro Oliveira", status: "INATIVO", dizimista: false, tel: "(11) 98765-4323" },
-  { id: 4, nome: "Ana Costa", status: "ATIVO", dizimista: true, tel: "(11) 98765-4324" },
-  { id: 5, nome: "Carlos Gomes", status: "ATIVO", dizimista: false, tel: "(11) 98765-4325" },
-];
 
 // -------------------------------------------------------------- MEMBROS -----
-function MembrosScreen({ onNavigate, onToast }) {
+function MembrosScreen({ role, membros, onOpenMembro, onNovoMembro, onToast }) {
   const [q, setQ] = React.useState("");
   const [filter, setFilter] = React.useState("TODOS");
-  const list = MEMBROS.filter((m) => m.nome.toLowerCase().includes(q.toLowerCase()) && (filter === "TODOS" || m.status === filter));
-  const filters = [["TODOS", "Todos"], ["ATIVO", "Ativos"], ["INATIVO", "Inativos"]];
+  const list = membros.filter((m) => {
+    const okSearch = m.nome.toLowerCase().includes(q.toLowerCase());
+    const okFilter = filter === "TODOS" ? true : filter === "DIZIMISTA" ? m.dizimista : m.status === filter;
+    return okSearch && okFilter;
+  });
+  const filters = [["TODOS", "Todos"], ["ATIVO", "Ativos"], ["INATIVO", "Inativos"], ["DIZIMISTA", "Dizimistas"]];
+  const stats = [["Total", membros.length], ["Ativos", membros.filter((m) => m.status === "ATIVO").length], ["Dizimistas", membros.filter((m) => m.dizimista).length]];
   return (
     <div className="screen has-nav">
-      <header className="hdr-primary">
+      <header className="hdr-primary flat">
         <h1 className="hdr-name" style={{ marginBottom: 12 }}>Membros</h1>
         <div className="row" style={{ gap: 8 }}>
           <div className="field-icon-l onprimary" style={{ flex: 1 }}>
             <Icon name="search" size={20} />
             <Input placeholder="Buscar membro..." value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
-          <button className="icon-btn-light" onClick={() => onToast("Filtros avançados")}><Icon name="filter" size={20} /></button>
+          <button className="icon-btn-light" onClick={() => onToast("Filtros avançados", "success")}><Icon name="filter" size={20} /></button>
         </div>
       </header>
+      <div className="member-stats">
+        {stats.map(([l, n]) => (<div key={l} className="member-stat"><p className="member-stat-n">{n}</p><p className="member-stat-l">{l}</p></div>))}
+      </div>
       <div className="filter-strip">
         {filters.map(([val, lbl]) => (
           <button key={val} className={"pill" + (filter === val ? " on" : "")} onClick={() => setFilter(val)}>{lbl}</button>
         ))}
       </div>
-      <div className="list">
+      <div className="list" style={{ paddingTop: 4 }}>
         {list.length === 0 ? (
-          <div className="empty"><Icon name="user" size={48} style={{ color: "var(--muted-foreground)" }} /><p>Nenhum membro encontrado</p></div>
+          <div className="empty"><Icon name="users" size={48} style={{ color: "var(--muted-foreground)" }} /><p>Nenhum membro encontrado</p></div>
         ) : list.map((m) => (
-          <Card key={m.id} className="tap row-between" onClick={() => onNavigate("membro-detalhe")}>
+          <Card key={m.id} className="tap row-between" onClick={() => onOpenMembro(m.id)}>
             <div>
               <div className="row-l" style={{ gap: 8 }}>
                 <h3 className="b600">{m.nome}</h3>
@@ -49,23 +49,21 @@ function MembrosScreen({ onNavigate, onToast }) {
                 {m.status === "ATIVO" ? "Ativo" : "Inativo"}
               </span>
             </div>
-            <div className="avatar"><Icon name="user" size={24} style={{ color: "var(--primary)" }} /></div>
+            <div className="avatar">{m.nome.charAt(0)}</div>
           </Card>
         ))}
       </div>
-      <button className="fab" onClick={() => onToast("Cadastrar membro — em breve")}><Icon name="plus" size={24} /></button>
+      {can(role, "cadastrar_membro") && (
+        <button className="fab" onClick={onNovoMembro}><Icon name="plus" size={24} /></button>
+      )}
     </div>
   );
 }
 
 // ------------------------------------------------------- MEMBRO DETALHE -----
-function MembroDetalheScreen({ onBack }) {
-  const [fav, setFav] = React.useState(false);
-  const m = {
-    nome: "João Silva Santos", email: "joao.silva@email.com", tel: "(11) 98765-4321",
-    endereco: "Rua Principal, 123 - São Paulo, SP", nascimento: "15/06/1980", membresia: "10/01/2015",
-    obs: "Membro ativo e comprometido. Participa do louvor.", dizimosAno: 12, totalDizimos: "R$ 6.240,00",
-  };
+function MembroDetalheScreen({ role, membro, onBack, onEdit, onDelete, onAlterarStatus, onAlterarDizimista, onToast }) {
+  const [fav, setFav] = React.useState(membro.dizimista);
+  const m = membro;
   return (
     <div className="screen">
       <header className="hdr-primary flat row-between">
@@ -81,8 +79,8 @@ function MembroDetalheScreen({ onBack }) {
           <h2 className="profile-name">{m.nome}</h2>
           <p className="hdr-greet">Membro desde {m.membresia}</p>
           <div className="row" style={{ gap: 8, justifyContent: "center", marginTop: 12 }}>
-            <span className="chip-light">Ativo</span>
-            <span className="chip-gold">Dizimista</span>
+            <span className="chip-light">{m.status === "ATIVO" ? "Ativo" : "Inativo"}</span>
+            {m.dizimista && <span className="chip-gold">Dizimista</span>}
           </div>
         </div>
         <div className="stack-sm" style={{ padding: 16 }}>
@@ -110,27 +108,39 @@ function MembroDetalheScreen({ onBack }) {
                 <p className="eyebrow">Total Dízimos</p><p className="stat-num" style={{ color: "var(--primary)" }}>{m.totalDizimos}</p></div>
             </div>
           </Card>
-          <Card><p className="eyebrow">Observações</p><p className="sm" style={{ marginTop: 8, lineHeight: 1.5 }}>{m.obs}</p></Card>
+          {m.obs && <Card><p className="eyebrow">Observações</p><p className="sm" style={{ marginTop: 8, lineHeight: 1.5 }}>{m.obs}</p></Card>}
         </div>
-        <div style={{ padding: "0 16px 24px" }}>
-          <Button variant="default" className="full"><Icon name="pencil" size={20} /> Editar</Button>
-        </div>
+          {can(role, "editar_membro") && (
+          <div style={{ padding: "0 16px 8px", display: "flex", gap: 8 }}>
+            <Button variant="outline" style={{ flex: 1 }} onClick={onEdit}><Icon name="pencil" size={18} /> Editar</Button>
+            {can(role, "alterar_status_membro") && <Button variant="outline" style={{ flex: 1 }} onClick={onAlterarStatus}><Icon name="user-check" size={18} /> Status</Button>}
+          </div>)}
+          {can(role, "excluir_membro") && (
+          <div style={{ padding: "0 16px 24px" }}>
+            <Button style={{ width: "100%", background: "var(--destructive)", color: "#fff" }} onClick={onDelete}><Icon name="trash-2" size={18} /> Excluir Membro</Button>
+          </div>)}
       </div>
     </div>
   );
 }
 
 // ----------------------------------------------------------- FINANCEIRO -----
-const TXS = [
-  { id: 1, tipo: "DIZIMO", quem: "João Silva", valor: 250, data: "11/05/2026", forma: "PIX" },
-  { id: 2, tipo: "OFERTA", quem: "Oferta - Ação Social", valor: 150, data: "10/05/2026", forma: "DINHEIRO" },
-  { id: 3, tipo: "DIZIMO", quem: "Maria Santos", valor: 300, data: "09/05/2026", forma: "TRANSFERENCIA" },
-  { id: 4, tipo: "OFERTA", quem: "Oferta - Missões", valor: 500, data: "08/05/2026", forma: "CARTAO_DEBITO" },
-];
-function FinanceiroScreen({ onNavigate, onToast }) {
+function FinanceiroScreen({ cultos, onNavigate, onOpenCulto, onToast }) {
   const [show, setShow] = React.useState(true);
+  const [periodo, setPeriodo] = React.useState("mes");
   const diz = 12450.5, ofe = 3200;
   const mask = (v) => (show ? brl(v) : "••••••••");
+  const periodos = [["mes", "Este Mês"], ["anterior", "Mês Anterior"], ["3meses", "Últimos 3 meses"], ["ano", "Este Ano"]];
+
+  // transações recentes cross-cultos
+  const txs = [];
+  cultos.forEach((c) => {
+    c.dizimos.forEach((d) => txs.push({ tipo: "DIZIMO", quem: d.membro, valor: d.valor, data: d.data, forma: d.forma }));
+    c.ofertas.forEach((o) => txs.push({ tipo: "OFERTA", quem: "Oferta " + o.tipo, valor: o.valor, data: o.data, forma: o.forma }));
+  });
+  const recentes = txs.slice(0, 5);
+  const emAndamento = cultos.find((c) => c.status === "EM_ANDAMENTO");
+
   return (
     <div className="screen has-nav">
       <header className="hdr-primary flat">
@@ -138,7 +148,7 @@ function FinanceiroScreen({ onNavigate, onToast }) {
           <h1 className="hdr-name" style={{ fontSize: 24 }}>Financeiro</h1>
           <button className="hdr-back" onClick={() => setShow(!show)}><Icon name={show ? "eye" : "eye-off"} size={20} /></button>
         </div>
-        <p className="hdr-greet">Última conferência: 11/05/2026</p>
+        <p className="hdr-greet">Última conferência: 24/05/2026</p>
       </header>
       <div className="fin-body">
         <div className="fin-card grad-green">
@@ -163,88 +173,188 @@ function FinanceiroScreen({ onNavigate, onToast }) {
             <div className="stat-box" style={{ background: "color-mix(in oklch,var(--accent) 10%,transparent)" }}><p className="metric-sub xs">Ofertas</p><p className="b600" style={{ color: "var(--accent-foreground)" }}>{show ? brl(ofe) : "••••"}</p></div>
           </div>
         </div>
-        <div className="grid-2">
-          <Button variant="default" onClick={() => onToast("Adicionar dízimo")}>Adicionar Dízimo</Button>
-          <Button variant="outline" onClick={() => onToast("Adicionar oferta")}>Adicionar Oferta</Button>
+
+        <div className="pills" style={{ marginTop: 0 }}>
+          {periodos.map(([val, lbl]) => (
+            <button key={val} className={"pill" + (periodo === val ? " on" : "")} onClick={() => setPeriodo(val)}>{lbl}</button>
+          ))}
         </div>
+
+        <Button variant="outline" className="full" onClick={() => onNavigate("relatorios")}>
+          <Icon name="bar-chart-2" size={20} /> Ver Relatório Completo
+        </Button>
+
         <h2 className="sec-head-solo">Transações Recentes</h2>
         <div className="stack-sm">
-          {TXS.map((t) => {
-            const isDiz = t.tipo === "DIZIMO";
+          {recentes.map((tx, i) => {
+            const isDiz = tx.tipo === "DIZIMO";
             return (
-              <Card key={t.id} className="row-between compact">
+              <Card key={i} className="row-between compact">
                 <div className="row-l" style={{ gap: 12 }}>
                   <div className="tx-ic" style={{ background: isDiz ? "color-mix(in oklch,var(--success) 20%,transparent)" : "color-mix(in oklch,var(--accent) 20%,transparent)" }}>
                     <Icon name={isDiz ? "dollar-sign" : "gift"} size={24} style={{ color: isDiz ? "var(--success)" : "var(--accent-foreground)" }} />
                   </div>
-                  <div><p className="b600 sm">{t.quem}</p><p className="metric-sub xs">{t.data} • {t.forma.replace(/_/g, " ")}</p></div>
+                  <div><p className="b600 sm">{tx.quem}</p><p className="metric-sub xs mono-meta">{tx.data} · {tx.forma.replace(/_/g, " ")}</p></div>
                 </div>
-                <p className="b600 sm">{show ? brl(t.valor) : "••••••"}</p>
+                <p className="b600 sm">{show ? brl(tx.valor) : "••••••"}</p>
               </Card>
             );
           })}
         </div>
       </div>
       <div className="fin-fab">
-        <Button variant="default" className="full" onClick={() => onNavigate("conferencia")}>Conferir Financeiro</Button>
+        <Button variant="default" className="full" onClick={() => emAndamento ? onOpenCulto(emAndamento.id) : onToast("Nenhum culto em andamento", "warning")}>Conferir Financeiro</Button>
       </div>
     </div>
   );
 }
 
-// ---------------------------------------------------------- CONFERÊNCIA -----
-function ConferenciaScreen({ onBack, onToast }) {
-  const [valor, setValor] = React.useState("15650.50");
-  const dados = { diz: 12450.5, ofe: 3200, total: 15650.5 };
-  const v = parseFloat(valor.replace(",", ".")) || 0;
-  const dif = v - dados.total;
-  const ok = Math.abs(dif) < 0.01;
+// ----------------------------------------------------------- RELATÓRIOS -----
+function RelatoriosScreen({ role, cultos, onOpenCulto, onNavigate }) {
+  const [periodo, setPeriodo] = React.useState("mes");
+  const periodos = [["mes", "Este Mês"], ["anterior", "Mês Anterior"], ["3meses", "Últimos 3 meses"], ["ano", "Este Ano"]];
+  const totalDiz = cultos.reduce((a, c) => a + cultoTotais(c).dizimos, 0);
+  const totalOfe = cultos.reduce((a, c) => a + cultoTotais(c).ofertas, 0);
+  const pendentes = cultos.filter((c) => c.status === "FINALIZADO" && !c.conferencia);
+
+  return (
+    <div className="screen has-nav">
+      <header className="hdr-primary flat">
+        <h1 className="hdr-name" style={{ fontSize: 24 }}>Relatórios</h1>
+        <p className="hdr-greet">Período: Maio 2026</p>
+      </header>
+      <div className="fin-body">
+        <div className="pills" style={{ marginTop: 0 }}>
+          {periodos.map(([val, lbl]) => (
+            <button key={val} className={"pill" + (periodo === val ? " on" : "")} onClick={() => setPeriodo(val)}>{lbl}</button>
+          ))}
+        </div>
+
+        <div className="grid-2">
+          <div className="fin-card grad-green" style={{ padding: 16 }}>
+            <Icon name="dollar-sign" size={22} />
+            <p className="fin-num" style={{ fontSize: 22, marginTop: 6 }}>{brl(totalDiz)}</p>
+            <p className="fin-eyebrow" style={{ marginTop: 2 }}>Dízimos · +12%</p>
+          </div>
+          <div className="fin-card grad-gold" style={{ padding: 16 }}>
+            <Icon name="gift" size={22} />
+            <p className="fin-num" style={{ fontSize: 22, marginTop: 6 }}>{brl(totalOfe)}</p>
+            <p className="fin-eyebrow" style={{ marginTop: 2 }}>Ofertas · +5%</p>
+          </div>
+        </div>
+        <div className="fin-card-total">
+          <p className="eyebrow">Total Geral do Período</p>
+          <p className="fin-num" style={{ color: "var(--primary)", margin: "4px 0 0" }}>{brl(totalDiz + totalOfe)}</p>
+        </div>
+
+        {pendentes.length > 0 && (
+          <div className="alert alert-warn">
+            <Icon name="alert-circle" size={20} style={{ color: "var(--warning)" }} />
+            <div style={{ flex: 1 }}>
+              <p className="b600" style={{ color: "var(--warning)", margin: 0 }}>{pendentes.length} culto(s) com conferência pendente</p>
+              {pendentes.map((c) => (
+                <button key={c.id} className="pend-link" onClick={() => onOpenCulto(c.id)}>Culto {c.data} — Conferir agora</button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {can(role, "ver_auditoria") && (
+          <Button variant="outline" className="full" onClick={() => onNavigate("auditoria")}>
+            <Icon name="shield" size={20} /> Ver Log de Auditoria
+          </Button>
+        )}
+        <h2 className="sec-head-solo">Arrecadação por Culto</h2>
+        <div className="stack-sm">
+          {cultos.map((c) => {
+            const t = cultoTotais(c);
+            const conf = c.conferencia;
+            return (
+              <Card key={c.id} className="tap" onClick={() => onOpenCulto(c.id)}>
+                <div className="row-between" style={{ marginBottom: 8 }}>
+                  <div><p className="b600 sm">{c.tema}</p><p className="metric-sub xs">{c.data}</p></div>
+                  {conf
+                    ? <Badge tone={conf.status === "CONFERIDO" ? "success" : "warning"}><Icon name={conf.status === "CONFERIDO" ? "check-circle-2" : "alert-circle"} size={12} />{conf.status === "CONFERIDO" ? "Conferido" : "Divergente"}</Badge>
+                    : <Badge tone="muted"><Icon name="lock-open" size={12} />Pendente</Badge>}
+                </div>
+                <div className="rep-row">
+                  <span className="metric-sub xs">Dízimos <b className="val-money" style={{ color: "var(--success)" }}>{brl(t.dizimos)}</b></span>
+                  <span className="metric-sub xs">Ofertas <b className="val-money" style={{ color: "var(--accent-foreground)" }}>{brl(t.ofertas)}</b></span>
+                  <span className="metric-sub xs">Total <b className="val-money" style={{ color: "var(--primary)" }}>{brl(t.total)}</b></span>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------------- AUDITORIA -----
+function AuditoriaScreen({ onBack }) {
+  const [q, setQ] = React.useState("");
+  const [filter, setFilter] = React.useState("TODOS");
+  const tipos = ["TODOS", "Culto", "Dizimo", "Oferta", "Conferencia", "Membro"];
+  const list = AUDIT_LOGS.filter((l) => {
+    const okQ = !q || l.descricao.toLowerCase().includes(q.toLowerCase()) || l.usuario.toLowerCase().includes(q.toLowerCase());
+    const okF = filter === "TODOS" || l.entidadeTipo === filter;
+    return okQ && okF;
+  });
+  const ACAO_COLOR = { INSERT: "var(--success)", UPDATE: "var(--warning)", DELETE: "var(--destructive)" };
+  const ACAO_ICON = { INSERT: "plus-circle", UPDATE: "pencil", DELETE: "trash-2" };
+  const TIPO_COLOR = {
+    Culto: "var(--primary)", Dizimo: "var(--success)", Oferta: "var(--accent-foreground)",
+    Conferencia: "var(--warning)", Membro: "var(--muted-foreground)",
+  };
   return (
     <div className="screen">
-      <header className="hdr-primary flat row-l" style={{ gap: 12 }}>
-        <button className="hdr-back" onClick={onBack}><Icon name="arrow-left" size={24} /></button>
-        <h1 className="hdr-name" style={{ fontSize: 18 }}>Conferência Financeira</h1>
-      </header>
-      <div className="detail-scroll" style={{ padding: 16 }}>
-        <div className={"alert " + (ok ? "alert-ok" : "alert-warn")}>
-          <Icon name={ok ? "check-circle-2" : "alert-circle"} size={20} style={{ color: ok ? "var(--success)" : "var(--warning)" }} />
+      <header className="hdr-primary flat">
+        <div className="row-l" style={{ gap: 10, marginBottom: 14 }}>
+          <button className="hdr-back" onClick={onBack}><Icon name="arrow-left" size={22} /></button>
           <div>
-            <p className="b600" style={{ color: ok ? "var(--success)" : "var(--warning)" }}>{ok ? "Conferência OK" : "Divergência Detectada"}</p>
-            <p className="metric-sub">{ok ? "Os valores conferem perfeitamente." : "Diferença de " + brl(Math.abs(dif))}</p>
+            <h1 className="hdr-name" style={{ fontSize: 20 }}>Auditoria</h1>
+            <p className="hdr-greet">Log de alterações do sistema</p>
           </div>
         </div>
-        <p className="eyebrow" style={{ margin: "16px 0 8px" }}>Valores Calculados</p>
-        <Card>
-          <div className="kv"><span className="row-l" style={{ gap: 8 }}><Icon name="dollar-sign" size={20} style={{ color: "var(--success)" }} /> Dízimos</span><span className="b600">{brl(dados.diz)}</span></div>
-          <div className="kv"><span className="row-l" style={{ gap: 8 }}><Icon name="gift" size={20} style={{ color: "var(--accent-foreground)" }} /> Ofertas</span><span className="b600">{brl(dados.ofe)}</span></div>
-          <div className="kv-total"><span className="b600">Total Calculado</span><span className="b700" style={{ color: "var(--primary)", fontSize: 18 }}>{brl(dados.total)}</span></div>
-        </Card>
-        <p className="eyebrow" style={{ margin: "16px 0 8px" }}>Valor Conferido (total do dinheiro contado)</p>
-        <div className="field-icon-l conf-input">
-          <Icon name="dollar-sign" size={20} />
-          <Input value={valor} onChange={(e) => setValor(e.target.value)} placeholder="0,00" />
+        <div className="field-icon-l">
+          <Icon name="search" size={20} />
+          <Input placeholder="Buscar por descrição ou usuário..." value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
-        <p className="metric-sub xs" style={{ marginTop: 6 }}>Use ponto ou vírgula como separador decimal</p>
-        <Card style={{ marginTop: 16 }}>
-          <p className="eyebrow">Detalhes da Conferência</p>
-          <div className="stack-sm" style={{ marginTop: 8 }}>
-            <div className="kv-plain"><span>Total Calculado</span><span className="b600">{brl(dados.total)}</span></div>
-            <div className="kv-plain"><span>Total Conferido</span><span className="b600">{brl(v)}</span></div>
-            <div className="kv-total"><span className="b700" style={{ color: dif >= 0 ? "var(--success)" : "var(--destructive)" }}>{dif >= 0 ? "Excesso" : "Falta"}</span>
-              <span className="b700" style={{ color: dif >= 0 ? "var(--success)" : "var(--destructive)", fontSize: 18 }}>{dif >= 0 ? "+" : ""}{brl(dif)}</span></div>
-          </div>
-        </Card>
-        <p className="eyebrow" style={{ margin: "16px 0 8px" }}>Observações (Opcional)</p>
-        <textarea className="textarea" rows={3} placeholder="Ex: Faltaram alguns trocados, valor já descontado..."></textarea>
+      </header>
+      <div className="pills" style={{ padding: "12px 16px 0", overflowX: "auto" }}>
+        {tipos.map((t) => (
+          <button key={t} className={"pill" + (filter === t ? " on" : "")} onClick={() => setFilter(t)}>{t}</button>
+        ))}
       </div>
-      <div className="fin-fab row" style={{ gap: 8 }}>
-        <Button variant="outline" style={{ flex: 1 }} onClick={onBack}>Cancelar</Button>
-        <Button style={{ flex: 1, background: ok ? "var(--success)" : "var(--warning)", color: "#fff" }} onClick={() => onToast("Conferência registrada")}>
-          {ok ? "Confirmar" : "Conferir Mesmo Assim"}
-        </Button>
+      <div style={{ padding: "12px 16px 80px" }}>
+        {list.length === 0 ? (
+          <div className="empty"><Icon name="shield" size={48} style={{ color: "var(--muted-foreground)" }} /><p>Nenhum registro encontrado</p></div>
+        ) : list.map((log) => (
+          <div key={log.id} className="audit-entry">
+            <div className="audit-timeline-line" />
+            <div className="audit-dot" style={{ background: ACAO_COLOR[log.acao] }}>
+              <Icon name={ACAO_ICON[log.acao]} size={12} style={{ color: "#fff" }} />
+            </div>
+            <div className="audit-body">
+              <div className="row-between" style={{ marginBottom: 4 }}>
+                <div className="row-l" style={{ gap: 6 }}>
+                  <span className="badge badge-muted" style={{ fontSize: 11, padding: "3px 8px", color: TIPO_COLOR[log.entidadeTipo] }}>{log.entidadeTipo}</span>
+                  <span className="badge" style={{ fontSize: 11, padding: "3px 8px", background: "color-mix(in oklch," + ACAO_COLOR[log.acao] + " 12%,transparent)", color: ACAO_COLOR[log.acao] }}>{log.acao}</span>
+                </div>
+                <span className="metric-sub xs mono-meta">{log.timestamp}</span>
+              </div>
+              <p className="b500" style={{ margin: "0 0 4px", fontSize: 14, lineHeight: 1.4 }}>{log.descricao}</p>
+              <div className="row-l" style={{ gap: 12 }}>
+                <span className="row-l metric-sub xs" style={{ gap: 4 }}><Icon name="user" size={12} />{log.usuario}</span>
+                {log.culto && <span className="row-l metric-sub xs" style={{ gap: 4 }}><Icon name="church" size={12} />{log.culto}</span>}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
-Object.assign(window, { MembrosScreen, MembroDetalheScreen, FinanceiroScreen, ConferenciaScreen });
+Object.assign(window, { MembrosScreen, MembroDetalheScreen, FinanceiroScreen, RelatoriosScreen, AuditoriaScreen });

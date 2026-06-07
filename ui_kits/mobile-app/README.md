@@ -11,7 +11,9 @@ High-fidelity, mostly-cosmetic recreation of the **Igreja Ipiranga** mobile app
 | `index.html` | App shell + state machine. Renders the phone frame and routes between screens. |
 | `kit-ui.jsx` | Primitives: `Icon` (Lucide), `Button`, `Input`, `Badge`, `Card`, `PhoneFrame`, `BottomNavigation`, `Toast`, plus the `brl()` currency helper. |
 | `kit-screens-a.jsx` | `LoginScreen`, `DashboardScreen`, `CultosScreen`, `CultoDetalheScreen`. |
-| `kit-screens-b.jsx` | `MembrosScreen`, `MembroDetalheScreen`, `FinanceiroScreen`, `ConferenciaScreen`. |
+| `kit-screens-b.jsx` | `MembrosScreen`, `MembroDetalheScreen`, `FinanceiroScreen`, `RelatoriosScreen`. |
+| `kit-modals.jsx` | `ConferenciaModal`, `ReaberturaModal`, `NovoCultoModal`, `SessaoExpiradaModal`. |
+| `kit-forms.jsx` | Registration forms: `RegistrarDizimoModal`, `RegistrarOfertaModal`, plus `MemberCombobox` (search a registered member OR enter an unregistered name) and the reusable `AuditoriaBlock` (tesoureiro que registra + conferente — names stored for audit). |
 | `kit.css` | All component styling, built on the tokens in `../../colors_and_type.css`. |
 
 ## Interactive flow
