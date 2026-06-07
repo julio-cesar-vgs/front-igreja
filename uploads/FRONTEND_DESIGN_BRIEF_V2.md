@@ -5,6 +5,17 @@
 > Cole este documento inteiro no Claude Design para gerar a versão revisada.
 > Mantém tudo que estava bom na v1 e corrige/adiciona o que estava faltando.
 
+> **Atualização 01/06/2026 — Contratos de API revisados:**
+> Todos os endpoints agora usam DTOs dedicados de request e response (sem expor entidades JPA).
+> Consulte `docs/PROTOTYPE_FIELD_CONTRACTS.md` para a lista completa de campos por tela.
+> Mudanças que impactam o protótipo:
+> - **Membros:** `GET /membros` e `GET /membros/{id}` retornam `MembroResponseDTO` (sem `igrejaId`/`version`)
+> - **Igrejas:** `GET /igrejas` e `GET /igrejas/{id}` retornam `IgrejaResponseDTO` (sem campos internos)
+> - **Louvores, Músicos, Cooperadores, Presbíteros, Visitantes:** respostas agora retornam `{id, nome, ...}` limpos
+> - **Conferência:** `POST /conferencia` agora retorna `ConferenciaDTO` (inclui `conferenteNome`, `conferenteId`)
+> - **Reabertura:** `POST /reabrir` retorna `CultoResponseDTO` (mesmo formato do detalhe do culto)
+> - **Aprovar Conferência:** `PATCH /conferencias/{id}/aprovar` recebe `{ "observacaoAprovacao": "..." }` (antes era Map genérico)
+
 ---
 
 ## Contexto do Produto
@@ -360,10 +371,18 @@ Quando DIVERGENTE:
 ```
 Fundo `bg-warning/10`, borda `border-warning`, ícone `alert-circle` âmbar, texto âmbar.
 
-**Bloco 4 — Dados do Tesoureiro:**
-Label: `RESPONSÁVEL PELA CONFERÊNCIA`
-- Campo "Nome(s) do(s) tesoureiro(s)" — input texto — `placeholder="Ex: Maria Silva, João Costa"`
-- (O `tesoureiroId` é enviado automaticamente pelo sistema via contexto do usuário logado)
+**Bloco 4 — Responsáveis pela Conferência (princípio dos quatro olhos):**
+Label: `RESPONSÁVEIS PELA CONFERÊNCIA`
+
+> ⚠️ **OBRIGATÓRIO:** a conferência exige presença de duas pessoas — o tesoureiro logado e um conferente físico.
+
+- Campo "Tesoureiro" — somente leitura — nome do usuário logado (preenchido automaticamente)
+- Campo "Nome do Conferente" — input texto — **obrigatório** — `placeholder="Nome de quem conferiu junto"`
+  - Erro inline se vazio: "O nome do conferente é obrigatório"
+  - Validação: 2–100 caracteres
+- Campo "Conferente é usuário do sistema?" — toggle (opcional)
+  - Se ativado: exibe select de usuários para vincular o `conferenteId`
+- Campo "Outros participantes" — input texto — opcional — `placeholder="Ex: Pr. José, Diácono Paulo"`
 
 **Bloco 5 — Observações (opcional):**
 - Textarea com placeholder: "Ex: Alguns trocados separados para troco..."
@@ -398,6 +417,7 @@ Visível apenas para ADMIN e SUPER_ADMIN.
 Este culto foi conferido em 31/05/2026.
 Total conferido: R$ 4.730,00
 Tesoureiro: Maria Silva
+Conferente: João Diácono
 
 Ao reabrir, a conferência existente será
 REMOVIDA e o culto voltará a aceitar
@@ -612,7 +632,8 @@ Conferência: CONFERIDO
   Total Sistema: R$ 3.000,00
   Total Contado: R$ 3.000,00
   Diferença: R$ 0,00
-  Tesoureiro: Maria Silva
+  Tesoureiro: Maria Silva (usuário logado)
+  Conferente: João Diácono (conferente físico)
   Data: 24/05/2026
 ```
 
@@ -693,7 +714,7 @@ Cada lista tem seu estado vazio com ícone Lucide centralizado + mensagem:
 | **Detalhe do Culto — tab Pessoas** | + Músicos + Presbíteros (seções separadas) |
 | **Detalhe do Culto — tab Financeiro** | + Lista individual de dízimos/ofertas + toggle privacidade |
 | **Detalhe do Culto — geral** | + Banner de culto bloqueado + desabilitação geral pós-conferência |
-| **Conferência** | Inputs separados por tipo (dízimos + ofertas) + nomesTesoureiros + aviso de bloqueio |
+| **Conferência** | Inputs separados por tipo (dízimos + ofertas) + **conferente obrigatório (dois olhos)** + aviso de bloqueio |
 | **Financeiro Global** | Remove botões de adicionar + adiciona filtro de período |
 | **Reabertura** | Modal novo com motivo obrigatório + confirmação em vermelho |
 | **Relatórios** | Tela nova com breakdown por culto + alerta de conferências pendentes |
