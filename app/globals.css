@@ -142,3 +142,31 @@
     outline-offset: 2px;
   }
 }
+
+/* Tema Alto Contraste (WCAG AAA) para idosos e baixa visao */
+.high-contrast {
+  --background: #ffffff;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --primary: #0a2e7a;
+  --primary-foreground: #ffffff;
+  --muted: #e2e8f0;
+  --muted-foreground: #0f172a;
+  --border: #000000;
+  --success: #14532d;
+  --destructive: #991b1b;
+}
+
+/* Folha dedicada de impressao (Declaracao de Dizimista / Relatorio de Assembleia) */
+@media print {
+  aside,
+  nav,
+  [data-no-print="true"] {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}

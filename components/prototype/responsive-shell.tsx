@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Home, Church, Users, Wallet, WifiOff, Monitor, Smartphone } from 'lucide-react'
+import { Home, Church, Users, Wallet, WifiOff, Monitor, Smartphone, Contrast, Type } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface ResponsiveShellProps {
@@ -33,6 +33,20 @@ export function ResponsiveShell({
   children,
 }: ResponsiveShellProps) {
   const [isOffline, setIsOffline] = useState(false)
+  const [highContrast, setHighContrast] = useState(false)
+  const [largeFont, setLargeFont] = useState(false)
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('high-contrast', highContrast)
+    }
+  }, [highContrast])
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.style.fontSize = largeFont ? '115%' : ''
+    }
+  }, [largeFont])
 
   useEffect(() => {
     const syncStatus = () => setIsOffline(typeof navigator !== 'undefined' ? !navigator.onLine : false)
@@ -100,8 +114,36 @@ export function ResponsiveShell({
           </div>
         )}
 
-        <div className="flex items-center justify-end gap-2 px-4 py-2 border-b border-border bg-card">
-          <span className="text-xs text-muted-foreground mr-auto">Visualização:</span>
+        <div data-no-print="true" className="flex flex-wrap items-center justify-end gap-2 px-4 py-2 border-b border-border bg-card">
+          <span className="text-xs text-muted-foreground mr-auto">Visualização & Acessibilidade:</span>
+          <button
+            type="button"
+            aria-pressed={highContrast}
+            onClick={() => setHighContrast((v) => !v)}
+            className={cn(
+              'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium min-h-[40px] border',
+              highContrast
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'bg-background text-foreground border-border hover:bg-muted',
+            )}
+          >
+            <Contrast aria-hidden="true" className="w-4 h-4" />
+            Alto Contraste
+          </button>
+          <button
+            type="button"
+            aria-pressed={largeFont}
+            onClick={() => setLargeFont((v) => !v)}
+            className={cn(
+              'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium min-h-[40px] border',
+              largeFont
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'bg-background text-foreground border-border hover:bg-muted',
+            )}
+          >
+            <Type aria-hidden="true" className="w-4 h-4" />
+            Fonte A+
+          </button>
           <button
             type="button"
             aria-pressed={previewMode === 'responsive'}

@@ -25,6 +25,16 @@ describe('ResponsiveShell — layout multiplataforma e status offline', () => {
 
     await user.click(screen.getByRole('button', { name: /Mobile \(375px\)/i }))
     expect(onToggle).toHaveBeenCalledWith('mobile-frame')
+
+    const contrastBtn = screen.getByRole('button', { name: /Alto Contraste/i })
+    await user.click(contrastBtn)
+    expect(contrastBtn).toHaveAttribute('aria-pressed', 'true')
+    expect(document.documentElement.classList.contains('high-contrast')).toBe(true)
+
+    const fontBtn = screen.getByRole('button', { name: /Fonte A\+/i })
+    await user.click(fontBtn)
+    expect(fontBtn).toHaveAttribute('aria-pressed', 'true')
+    expect(document.documentElement.style.fontSize).toBe('115%')
   })
 
   it('exibe banner de aviso quando o navegador reporta estado offline', () => {
