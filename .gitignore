@@ -16,3 +16,9 @@ node_modules
 .DS_Store
 
 prototipo
+
+# Lagune security findings & tracking (keep charter.md and configs.json tracked)
+/.lagune/memory/detect.md
+/.lagune/memory/plan.md
+/.lagune/memory/harden.md
+/.lagune/tracking.json
