@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { PhoneFrame } from '@/components/prototype/phone-frame'
+import { ResponsiveShell } from '@/components/prototype/responsive-shell'
 import { LoginScreen } from '@/components/prototype/screens/login-screen'
 import { DashboardScreen } from '@/components/prototype/screens/dashboard-screen'
 import { CultosScreen } from '@/components/prototype/screens/cultos-screen'
@@ -35,6 +36,7 @@ const SCREEN_BUTTONS: { id: ScreenType; label: string }[] = [
 
 export default function PrototypePage() {
   const [currentScreen, setCurrentScreen] = useState<ScreenType>('login')
+  const [previewMode, setPreviewMode] = useState<'responsive' | 'mobile-frame'>('mobile-frame')
 
   const handleNavigate = (screen: string) => {
     const map: Record<string, ScreenType> = {
@@ -97,8 +99,14 @@ export default function PrototypePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-primary/10 to-accent/10 p-4 flex flex-col items-center justify-center">
-      <div className="max-w-md w-full">
+    <ResponsiveShell
+      activeTab={activeTab}
+      onTabChange={handleNavigate}
+      previewMode={previewMode}
+      onTogglePreviewMode={setPreviewMode}
+    >
+      <main className="min-h-full bg-gradient-to-br from-primary/10 to-accent/10 p-4 flex flex-col items-center justify-center">
+      <div className={previewMode === 'responsive' ? 'w-full max-w-5xl' : 'max-w-md w-full'}>
         {/* Screen Navigation Info */}
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -162,18 +170,29 @@ export default function PrototypePage() {
           </div>
         </div>
 
-        {/* Phone Frame */}
-        <PhoneFrame>
-          <div className="flex flex-col h-full">
-            {renderScreen()}
+        {/* Área de exibição: Responsivo Web/Tablet ou Moldura Mobile 375px */}
+        {previewMode === 'mobile-frame' ? (
+          <PhoneFrame>
+            <div className="flex flex-col h-full">
+              {renderScreen()}
+              {currentScreen !== 'login' && currentScreen !== 'membro-detalhe' && (
+                <BottomNavigation
+                  activeTab={activeTab}
+                  onTabChange={handleNavigate}
+                />
+              )}
+            </div>
+          </PhoneFrame>
+        ) : (
+          <div className="bg-card border border-border rounded-2xl shadow-lg overflow-hidden min-h-[640px] flex flex-col">
+            <div className="flex-1">{renderScreen()}</div>
             {currentScreen !== 'login' && currentScreen !== 'membro-detalhe' && (
-              <BottomNavigation
-                activeTab={activeTab}
-                onTabChange={handleNavigate}
-              />
+              <div className="md:hidden">
+                <BottomNavigation activeTab={activeTab} onTabChange={handleNavigate} />
+              </div>
             )}
           </div>
-        </PhoneFrame>
+        )}
 
         {/* Design System Info */}
         <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
@@ -206,6 +225,7 @@ export default function PrototypePage() {
           </div>
         </div>
       </div>
-    </main>
+      </main>
+    </ResponsiveShell>
   )
 }
