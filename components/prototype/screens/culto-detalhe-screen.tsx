@@ -152,7 +152,7 @@ export function CultoDetalheScreen({ onBack, onNavigate }: CultoDetalheScreenPro
                     </div>
                   </div>
                   {!cultoData.financeiro.conferido && (
-                    <Button size="sm" className="rounded-xl">
+                    <Button size="sm" className="rounded-xl" onClick={() => onNavigate("conferencia")}>
                       Conferir
                     </Button>
                   )}

@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { TrendingUp, DollarSign, Gift, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-export function FinanceiroScreen() {
+export function FinanceiroScreen({ onNavigate }: { onNavigate?: (screen: string) => void }) {
   const [showValues, setShowValues] = useState(true)
 
   const financeiro = {
@@ -197,7 +197,10 @@ export function FinanceiroScreen() {
 
       {/* Action Button */}
       <div className="fixed bottom-20 left-4 right-4">
-        <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg py-3 h-auto text-base font-semibold">
+        <Button
+          onClick={() => onNavigate?.('conferencia')}
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg py-3 h-auto text-base font-semibold"
+        >
           Conferir Financeiro
         </Button>
       </div>

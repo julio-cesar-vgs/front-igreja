@@ -11,7 +11,7 @@ interface PhoneFrameProps {
 export function PhoneFrame({ children, className, showStatusBar = true }: PhoneFrameProps) {
   return (
     <div className={cn(
-      "relative mx-auto w-[375px] h-[812px] bg-background rounded-[3rem] shadow-2xl border-8 border-foreground/10 overflow-hidden",
+      "relative mx-auto w-[375px] h-[812px] bg-background rounded-[3rem] shadow-2xl border-8 border-foreground/10 overflow-hidden [transform:translateZ(0)]",
       className
     )}>
       {/* Notch */}

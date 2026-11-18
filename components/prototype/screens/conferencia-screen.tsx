@@ -124,13 +124,13 @@ export function ConferenciaScreen({ onBack }: { onBack: () => void }) {
               <span className="font-semibold text-foreground">{formatCurrency(valor)}</span>
             </div>
             <div className="border-t border-border pt-2 flex justify-between">
-              <span className={`font-bold ${diferenca >= 0 ? 'text-success' : 'text-destructive'}`}>
-                {diferenca >= 0 ? 'Excesso' : 'Falta'}
+              <span className={`font-bold ${status === 'CONFERIDO' ? 'text-success' : diferenca > 0 ? 'text-warning' : 'text-destructive'}`}>
+                {status === 'CONFERIDO' ? 'Diferença' : diferenca > 0 ? 'Excesso' : 'Falta'}
               </span>
               <span
-                className={`font-bold text-lg ${diferenca >= 0 ? 'text-success' : 'text-destructive'}`}
+                className={`font-bold text-lg ${status === 'CONFERIDO' ? 'text-success' : diferenca > 0 ? 'text-warning' : 'text-destructive'}`}
               >
-                {diferenca >= 0 ? '+' : ''}{formatCurrency(diferenca)}
+                {diferenca > 0 ? '+' : ''}{formatCurrency(diferenca)}
               </span>
             </div>
           </div>

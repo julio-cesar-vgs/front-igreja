@@ -5,7 +5,7 @@ import { Search, Plus, Filter, User, Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-export function MembrosScreen() {
+export function MembrosScreen({ onNavigate }: { onNavigate?: (screen: string) => void }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('TODOS')
 
@@ -80,6 +80,7 @@ export function MembrosScreen() {
           filteredMembros.map((membro) => (
             <div
               key={membro.id}
+              onClick={() => onNavigate?.('membro-detalhe')}
               className="bg-card border border-border rounded-xl p-4 flex items-start justify-between hover:bg-secondary/50 transition cursor-pointer"
             >
               <div className="flex-1">
