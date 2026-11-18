@@ -109,7 +109,7 @@ describe('CultoDetalheScreen', () => {
     render(<CultoDetalheScreen {...defaultProps} />)
     
     // The back button is the first button in the header
-    const backButton = screen.getByRole('button', { name: '' })
+    const backButton = screen.getByRole('button', { name: 'Voltar' })
     await user.click(backButton)
     expect(defaultProps.onBack).toHaveBeenCalledTimes(1)
   })

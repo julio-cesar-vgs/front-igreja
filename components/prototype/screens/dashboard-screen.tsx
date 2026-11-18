@@ -27,9 +27,14 @@ export function DashboardScreen({ onNavigate }: DashboardScreenProps) {
             <p className="text-primary-foreground/80 text-sm">Bem-vindo,</p>
             <h1 className="text-xl font-bold text-primary-foreground">Pastor Joao</h1>
           </div>
-          <button className="relative p-2 rounded-full bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors">
-            <Bell className="w-6 h-6 text-primary-foreground" />
-            <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-accent rounded-full" />
+          <button
+            type="button"
+            aria-label="Notificações"
+            className="relative min-w-[48px] min-h-[48px] flex items-center justify-center rounded-full bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors"
+          >
+            <Bell aria-hidden="true" className="w-6 h-6 text-primary-foreground" />
+            <span className="sr-only">Notificações pendentes</span>
+            <span aria-hidden="true" className="absolute top-2 right-2 w-2.5 h-2.5 bg-accent rounded-full" />
           </button>
         </div>
         
@@ -56,10 +61,22 @@ export function DashboardScreen({ onNavigate }: DashboardScreenProps) {
       <div className="px-6 -mt-4 space-y-4">
         <div className="grid grid-cols-2 gap-4">
           {/* Card Membros */}
-          <Card className="shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => onNavigate("membros")}>
+          <Card
+            role="button"
+            tabIndex={0}
+            aria-label="Abrir lista de Membros Ativos"
+            className="shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+            onClick={() => onNavigate("membros")}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                onNavigate("membros")
+              }
+            }}
+          >
             <CardContent className="p-4">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-3">
-                <Users className="w-5 h-5 text-primary" />
+                <Users aria-hidden="true" className="w-5 h-5 text-primary" />
               </div>
               <p className="text-2xl font-bold text-foreground">156</p>
               <p className="text-sm text-muted-foreground">Membros Ativos</p>
@@ -67,7 +84,19 @@ export function DashboardScreen({ onNavigate }: DashboardScreenProps) {
           </Card>
 
           {/* Card Financeiro */}
-          <Card className="shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => onNavigate("financeiro")}>
+          <Card
+            role="button"
+            tabIndex={0}
+            aria-label="Abrir módulo Financeiro"
+            className="shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+            onClick={() => onNavigate("financeiro")}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                onNavigate("financeiro")
+              }
+            }}
+          >
             <CardContent className="p-4">
               <div className="w-10 h-10 rounded-xl bg-chart-2/20 flex items-center justify-center mb-3">
                 <Wallet className="w-5 h-5 text-chart-2" />

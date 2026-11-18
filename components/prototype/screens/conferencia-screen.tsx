@@ -30,10 +30,12 @@ export function ConferenciaScreen({ onBack }: { onBack: () => void }) {
       {/* Header */}
       <div className="sticky top-0 z-10 bg-primary text-primary-foreground p-4 flex items-center gap-3 shadow-md">
         <button
+          type="button"
           onClick={onBack}
-          className="p-2 hover:bg-primary-foreground/20 rounded-lg transition"
+          aria-label="Voltar"
+          className="min-w-[48px] min-h-[48px] flex items-center justify-center hover:bg-primary-foreground/20 rounded-lg transition"
         >
-          <ArrowLeft className="w-6 h-6" />
+          <ArrowLeft aria-hidden="true" className="w-6 h-6" />
         </button>
         <h1 className="text-xl font-bold">Conferência Financeira</h1>
       </div>

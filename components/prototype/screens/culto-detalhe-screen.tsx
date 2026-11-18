@@ -59,11 +59,13 @@ export function CultoDetalheScreen({ onBack, onNavigate }: CultoDetalheScreenPro
       {/* Header */}
       <div className="bg-primary px-6 pt-4 pb-6 rounded-b-3xl">
         <div className="flex items-center gap-3 mb-4">
-          <button 
+          <button
+            type="button"
+            aria-label="Voltar"
             onClick={onBack}
-            className="p-2 rounded-full bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors"
+            className="min-w-[48px] min-h-[48px] flex items-center justify-center rounded-full bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-primary-foreground" />
+            <ArrowLeft aria-hidden="true" className="w-5 h-5 text-primary-foreground" />
           </button>
           <div className="flex-1">
             <Badge className="bg-accent text-accent-foreground font-medium mb-1">

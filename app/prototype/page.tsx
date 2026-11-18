@@ -118,7 +118,7 @@ export default function PrototypePage() {
                 href="/prototipo/ui_kits/mobile-app/index.html"
                 className="block p-2 rounded bg-primary text-primary-foreground font-semibold text-center hover:opacity-90 transition"
               >
-                Abrir Protótipo V2 Completo (9 Telas + 12 Modais + Perfis)
+                Abrir Protótipo V2 Completo (11 Telas + 18 Modais + Escala GPS + PDF)
               </a>
               <div className="grid grid-cols-2 gap-1.5">
                 <a

@@ -44,9 +44,10 @@ export function MembrosScreen({ onNavigate }: { onNavigate?: (screen: string) =>
           <Button 
             size="icon" 
             variant="outline"
-            className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 border-0"
+            aria-label="Filtrar membros"
+            className="min-w-[48px] min-h-[48px] bg-primary-foreground text-primary hover:bg-primary-foreground/90 border-0"
           >
-            <Filter className="w-5 h-5" />
+            <Filter aria-hidden="true" className="w-5 h-5" />
           </Button>
         </div>
       </div>
@@ -80,14 +81,23 @@ export function MembrosScreen({ onNavigate }: { onNavigate?: (screen: string) =>
           filteredMembros.map((membro) => (
             <div
               key={membro.id}
+              role="button"
+              tabIndex={0}
+              aria-label={`Abrir perfil de ${membro.nome}`}
               onClick={() => onNavigate?.('membro-detalhe')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  onNavigate?.('membro-detalhe')
+                }
+              }}
               className="bg-card border border-border rounded-xl p-4 flex items-start justify-between hover:bg-secondary/50 transition cursor-pointer"
             >
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="text-foreground font-semibold text-base">{membro.nome}</h3>
                   {membro.dizimista && (
-                    <Heart className="w-4 h-4 fill-success text-success" />
+                    <Heart aria-label="Dizimista" className="w-4 h-4 fill-success text-success" />
                   )}
                 </div>
                 <p className="text-muted-foreground text-sm">{membro.telefone}</p>
@@ -115,10 +125,11 @@ export function MembrosScreen({ onNavigate }: { onNavigate?: (screen: string) =>
 
       {/* FAB - Floating Action Button */}
       <Button 
+        aria-label="Novo membro"
         className="fixed bottom-24 right-4 rounded-full w-14 h-14 shadow-lg flex items-center justify-center bg-accent hover:bg-accent/90 text-accent-foreground"
         size="lg"
       >
-        <Plus className="w-6 h-6" />
+        <Plus aria-hidden="true" className="w-6 h-6" />
       </Button>
 
       {/* Bottom spacing for navigation */}

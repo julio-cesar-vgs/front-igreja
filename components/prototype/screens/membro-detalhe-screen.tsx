@@ -27,15 +27,19 @@ export function MembroDetalheScreen({ onBack }: { onBack: () => void }) {
       {/* Header */}
       <div className="sticky top-0 z-10 bg-primary text-primary-foreground p-4 flex items-center justify-between shadow-md">
         <button
+          type="button"
+          aria-label="Voltar"
           onClick={onBack}
-          className="p-2 hover:bg-primary-foreground/20 rounded-lg transition"
+          className="min-w-[48px] min-h-[48px] flex items-center justify-center hover:bg-primary-foreground/20 rounded-lg transition"
         >
-          <ArrowLeft className="w-6 h-6" />
+          <ArrowLeft aria-hidden="true" className="w-6 h-6" />
         </button>
         <h1 className="text-xl font-bold flex-1 text-center">Perfil do Membro</h1>
         <button
+          type="button"
+          aria-label={isFavorited ? "Remover dos favoritos" : "Favoritar membro"}
           onClick={() => setIsFavorited(!isFavorited)}
-          className="p-2 hover:bg-primary-foreground/20 rounded-lg transition"
+          className="min-w-[48px] min-h-[48px] flex items-center justify-center hover:bg-primary-foreground/20 rounded-lg transition"
         >
           <Heart
             className={`w-6 h-6 ${isFavorited ? 'fill-accent' : ''}`}

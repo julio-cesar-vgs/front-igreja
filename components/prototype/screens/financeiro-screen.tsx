@@ -63,13 +63,15 @@ export function FinanceiroScreen({ onNavigate }: { onNavigate?: (screen: string)
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-2xl font-bold">Financeiro</h1>
           <button
+            type="button"
+            aria-label={showValues ? "Ocultar valores financeiros" : "Mostrar valores financeiros"}
             onClick={() => setShowValues(!showValues)}
-            className="p-2 hover:bg-primary-foreground/20 rounded-lg transition"
+            className="min-w-[48px] min-h-[48px] flex items-center justify-center hover:bg-primary-foreground/20 rounded-lg transition"
           >
             {showValues ? (
-              <Eye className="w-5 h-5" />
+              <Eye aria-hidden="true" className="w-5 h-5" />
             ) : (
-              <EyeOff className="w-5 h-5" />
+              <EyeOff aria-hidden="true" className="w-5 h-5" />
             )}
           </button>
         </div>
